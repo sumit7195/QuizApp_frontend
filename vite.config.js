@@ -1,12 +1,25 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    proxy: {
-      "/api": "http://localhost:7000/", // the address that u serve in the backend
+
+export default defineConfig(({ command, mode }) => {
+  // Load env file based on `mode` in the current working directory.
+  // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
+  const env = loadEnv(mode, process.cwd(), "");
+
+  return {
+    plugins: [react()],
+    // vite config
+    define: {
+      ...Object.keys(env).reduce((prev, key) => {
+        prev[`process.env.${key}`] = JSON.stringify(env[key]);
+        return prev;
+      }, {}),
     },
-  },
+    server: {
+      proxy: {
+        "/api": env.API_URL,
+      },
+    },
+  };
 });
