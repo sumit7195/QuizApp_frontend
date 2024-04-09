@@ -1,34 +1,30 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { Button } from "react-bootstrap";
 
-
-const AdminLogin = () => {
+const AdminSignUp = () => {
   const navigate = useNavigate();
   const initialValues = {
-    username: "",
+    userName: "",
     password: "",
   };
 
   const validationSchema = Yup.object({
-    username: Yup.string().required("Username is required"),
-    password: Yup.string().required("Password is required"),
+    userName: Yup.string().required("userName is required"),
+    password: Yup.string()
+      .min(6, "Password must be at least 6 characters")
+      .required("Password is required"),
   });
-
-  //   const history = useHistory(); // Initialize useHistory
 
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     try {
-      const response = await axios.post("/api/admin/login",  values);
-      const { token } = response.data; // Assuming your API returns a token upon successful login
-
-      localStorage.setItem("token", token); // Save the token to local storage
-      navigate("/admin-dashboard");
+      const response = await axios.post("/api/admin/create", values);
+      navigate("/admin-login");
+      console.log(response.data); // Handle success, e.g., show success message to the user
     } catch (error) {
-      console.error("Error logging in:", error);
-      setFieldError("username", "Invalid username or password"); // Set error message for a specific field
+      console.error("Error registering user:", error);
+      setFieldError("userName", "Registration failed. Please try again."); // Set error message for a specific field
     } finally {
       setSubmitting(false);
     }
@@ -38,7 +34,7 @@ const AdminLogin = () => {
     <div className="container mt-4">
       <div className="card">
         <div className="card-body">
-          <h2 className="card-title text-center mb-4">Admin Login</h2>
+          <h2 className="card-title text-center mb-4">Admin Registration</h2>
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -46,17 +42,17 @@ const AdminLogin = () => {
           >
             <Form>
               <div className="mb-3">
-                <label htmlFor="username" className="form-label">
-                  Username:
+                <label htmlFor="userName" className="form-label">
+                  userName:
                 </label>
                 <Field
                   type="text"
-                  id="username"
-                  name="username"
+                  id="userName"
+                  name="userName"
                   className="form-control"
                 />
                 <ErrorMessage
-                  name="username"
+                  name="userName"
                   component="div"
                   className="text-danger"
                 />
@@ -78,21 +74,14 @@ const AdminLogin = () => {
                 />
               </div>
               <button type="submit" className="btn btn-primary">
-                Login
+                Register
               </button>
             </Form>
-
           </Formik>
-       
-              <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems:"center"}}>
-          <span>Did not have Account?</span>
-            <Button onClick={() => navigate( "/admin-signUp" )}>SignUp</Button>
-            </div>
-            </div>
-         
+        </div>
       </div>
     </div>
   );
 };
 
-export default AdminLogin;
+export default AdminSignUp;

@@ -8,6 +8,7 @@ import AdminLogin from "./components/AdminLogin";
 import AdminDashboard from "./components/AdminDashboard";
 import AddQuizForm from "./components/createQuiz";
 import EditQuizForm from "./components/EditQuiz";
+import AdminSignUp from "./components/AdminSignup";
 
 const AppRoutes = () => {
   return (
@@ -18,6 +19,7 @@ const AppRoutes = () => {
       <Route path="/user-dashboard" element={<UserDashboard />} />
       <Route path="/quiz/:id" element={<Quiz />} />
       <Route path="/admin-login" element={<AdminLogin />} />
+      <Route path="/admin-signUp" element={<AdminSignUp />} />
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
       <Route path="/add-quiz" element={<AddQuizForm />} />
       <Route path="/edit-quiz/:id" element={<EditQuizForm />} />
