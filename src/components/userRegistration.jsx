@@ -10,6 +10,8 @@ const RegistrationForm = () => {
     email: "",
     password: "",
   };
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
   const validationSchema = Yup.object({
     username: Yup.string().required("Username is required"),
@@ -23,7 +25,7 @@ const RegistrationForm = () => {
 
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     try {
-      const response = await axios.post("/api/users/register", values);
+      const response = await axios.post(`${API_BASE_URL}/api/users/register`, values);
       navigate("/login");
       console.log(response.data); // Handle success, e.g., show success message to the user
     } catch (error) {

@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import SpinnerComp from "./Spinner";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const AdminDashboard = () => {
   const [userData, setUserData] = useState(null);
@@ -14,11 +16,14 @@ const AdminDashboard = () => {
     const fetchUserData = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await axios.get("/api/admin/admin-quizzes", {
-          headers: {
-            token,
-          },
-        }); // Assuming your backend has an endpoint to fetch user data
+        const response = await axios.get(
+          `${API_BASE_URL}/api/admin/admin-quizzes`,
+          {
+            headers: {
+              token,
+            },
+          }
+        ); // Assuming your backend has an endpoint to fetch user data
         setUserData(response.data);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -31,17 +36,19 @@ const AdminDashboard = () => {
     fetchUserData();
   }, []);
 
-  const deleteQuiz = async ( id ) => {
-
+  const deleteQuiz = async (id) => {
     const updatedQuiz = userData.filter((item) => item._id !== id);
 
     setUserData(updatedQuiz);
 
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.delete(`/api/admin/quizzes/${id}`, {
-        headers: { token },
-      });
+      const res = await axios.delete(
+        `${API_BASE_URL}/api/admin/quizzes/${id}`,
+        {
+          headers: { token },
+        }
+      );
       console.log("response from delete", res);
       alert("Quiz deleted successfully");
     } catch (err) {
@@ -49,7 +56,12 @@ const AdminDashboard = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <SpinnerComp />
+      </div>
+    );
   if (error) return <div>{error}</div>;
 
   return (

@@ -11,13 +11,15 @@ const Quiz = () => {
   const [selectedOptions, setSelectedOptions] = useState({});
   const params = useParams();
   const navigate = useNavigate();
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
   useEffect(() => {
     const fetchQuizData = async () => {
       const { id } = params;
 
       try {
-        const response = await axios.get(`/api/quizzes/${id}`, {
+        const response = await axios.get(`${API_BASE_URL}/api/quizzes/${id}`, {
           headers: {
             token: localStorage.getItem("token"),
           },
@@ -52,7 +54,7 @@ const Quiz = () => {
 
     const id = params.id;
 
-    axios.post(`/api/users/quizzes/${id}/submit`, data, {
+    axios.post(`${API_BASE_URL}/api/users/quizzes/${id}/submit`, data, {
       headers: { token: localStorage.getItem("token") },
     });
 

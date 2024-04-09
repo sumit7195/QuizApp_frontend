@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const AdminLogin = () => {
 
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     try {
-      const response = await axios.post("/api/admin/login",  values);
+      const response = await axios.post(`${API_BASE_URL}/api/admin/login`,  values);
       const { token } = response.data; // Assuming your API returns a token upon successful login
 
       localStorage.setItem("token", token); // Save the token to local storage

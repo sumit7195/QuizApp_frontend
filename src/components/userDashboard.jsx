@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import SpinnerComp from "./Spinner";
 
 const UserDashboard = () => {
   const [userData, setUserData] = useState(null);
@@ -9,12 +10,13 @@ const UserDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await axios.get("/api/users/users/quiz-attempts", {
+        const response = await axios.get(`${API_BASE_URL}/api/users/users/quiz-attempts`, {
           headers: {
             token,
           },
@@ -29,9 +31,10 @@ const UserDashboard = () => {
     };
 
     const availableQuiz = async () => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem( "token" );
+      
       try {
-        const response = await axios.get("/api/quizzes", {
+        const response = await axios.get(`${API_BASE_URL}/api/quizzes`, {
           headers: {
             token,
           },
@@ -49,7 +52,12 @@ const UserDashboard = () => {
     fetchUserData();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <SpinnerComp />
+      </div>
+    );
   if (error) return <div>{error}</div>;
 
   return (
@@ -65,7 +73,7 @@ const UserDashboard = () => {
       {/* fetch all the available quiz */}
       <h1>Available Quiz</h1>
 
-      {availableQuiz.map((item) => (
+      {availableQuiz?.map((item) => (
         <div key={item._id}>
           <h3>{item.title}</h3>
           <Button onClick={() => navigate(`/quiz/${item._id}`)}>Attempt</Button>

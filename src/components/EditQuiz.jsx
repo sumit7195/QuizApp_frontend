@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 const EditQuizForm = () => {
   const params = useParams();
@@ -24,7 +26,7 @@ const EditQuizForm = () => {
 
   const fetchQuizData = async () => {
     try {
-      const response = await axios.get(`/api/admin/quizzes/${params.id}`, {
+      const response = await axios.get(`${API_BASE_URL}/api/admin/quizzes/${params.id}`, {
         headers: {
           token: localStorage.getItem("token"),
         },
@@ -53,7 +55,7 @@ const EditQuizForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`/api/admin/quizzes/${params.id}`, formData, {
+      const response = await axios.put(`${API_BASE_URL}/api/admin/quizzes/${params.id}`, formData, {
         headers: {
           token: localStorage.getItem("token"),
         },

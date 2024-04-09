@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 const AddQuizForm = () => {
     const navigate = useNavigate();
@@ -35,7 +37,7 @@ const AddQuizForm = () => {
     e.preventDefault();
     try {
       console.log("formData", formData);
-      const response = await axios.post("/api/admin/quizzes", formData, {
+      const response = await axios.post(`${API_BASE_URL}/api/admin/quizzes`, formData, {
         headers: {
           token: localStorage.getItem("token"),
         },

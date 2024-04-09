@@ -2,6 +2,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import axios from "axios";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 const AdminSignUp = () => {
   const navigate = useNavigate();
@@ -19,7 +21,7 @@ const AdminSignUp = () => {
 
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     try {
-      const response = await axios.post("/api/admin/create", values);
+      const response = await axios.post(`${API_BASE_URL}/api/admin/create`, values);
       navigate("/admin-login");
       console.log(response.data); // Handle success, e.g., show success message to the user
     } catch (error) {
